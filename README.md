@@ -10,3 +10,4 @@ This repository includes example applications for [@perawallet/connect](https://
 - [Svelte](./Svelte/)
 - [Next.js](./NextJS/)
 - [Nuxt.js](./NuxtJS/)
+- [VanillaJS](./VanillaJS/)
