@@ -33,7 +33,10 @@ export interface IScenarioTxn {
   message?: string;
 }
 
-export type ScenarioReturnType = IScenarioTxn[][];
+export type ScenarioReturnType = {
+  transaction: IScenarioTxn[][];
+  transactionTimeout?: number;
+};
 
 export type Scenario = (chain: ChainType, address: string) => Promise<ScenarioReturnType>;
 
@@ -90,7 +93,9 @@ const singlePayTxn: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singlePayTxnWithClose: Scenario = async (
@@ -109,7 +114,9 @@ const singlePayTxnWithClose: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singlePayTxnWithRekey: Scenario = async (
@@ -128,7 +135,10 @@ const singlePayTxnWithRekey: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singlePayTxnWithRekeyAndClose: Scenario = async (
@@ -148,7 +158,10 @@ const singlePayTxnWithRekeyAndClose: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singlePayTxnWithInvalidAuthAddress: Scenario = async (
@@ -168,7 +181,10 @@ const singlePayTxnWithInvalidAuthAddress: Scenario = async (
   const txnsToSign = [
     {txn, message: "This is a transaction message", authAddr: "INVALID_ADDRESS"}
   ];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAssetOptInTxn: Scenario = async (
@@ -188,7 +204,10 @@ const singleAssetOptInTxn: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAssetOptInTxnToInvalidAsset: Scenario = async (
@@ -208,7 +227,10 @@ const singleAssetOptInTxnToInvalidAsset: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAssetTransferTxn: Scenario = async (
@@ -228,7 +250,10 @@ const singleAssetTransferTxn: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAssetTransferTxnWithClose: Scenario = async (
@@ -249,7 +274,10 @@ const singleAssetTransferTxnWithClose: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleInvalidAssetTransferTxn: Scenario = async (
@@ -269,7 +297,10 @@ const singleInvalidAssetTransferTxn: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppOptIn: Scenario = async (
@@ -289,7 +320,10 @@ const singleAppOptIn: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppCall: Scenario = async (
@@ -309,7 +343,10 @@ const singleAppCall: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppCallNoArgs: Scenario = async (
@@ -329,7 +366,10 @@ const singleAppCallNoArgs: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppCallWithRekey: Scenario = async (
@@ -350,7 +390,10 @@ const singleAppCallWithRekey: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppCloseOut: Scenario = async (
@@ -370,7 +413,10 @@ const singleAppCloseOut: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppClearState: Scenario = async (
@@ -390,7 +436,10 @@ const singleAppClearState: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppCreate: Scenario = async (
@@ -417,7 +466,10 @@ const singleAppCreate: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppCreateExtraPage: Scenario = async (
@@ -445,7 +497,10 @@ const singleAppCreateExtraPage: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppUpdate: Scenario = async (
@@ -470,7 +525,10 @@ const singleAppUpdate: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const singleAppDelete: Scenario = async (
@@ -490,7 +548,10 @@ const singleAppDelete: Scenario = async (
   });
 
   const txnsToSign = [{txn}];
-  return [txnsToSign];
+
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const sign1FromGroupTxn: Scenario = async (
@@ -523,7 +584,9 @@ const sign1FromGroupTxn: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const sign2FromGroupTxn: Scenario = async (
@@ -568,7 +631,9 @@ const sign2FromGroupTxn: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const signGroupWithPayOptinTransfer: Scenario = async (
@@ -609,7 +674,9 @@ const signGroupWithPayOptinTransfer: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const signGroupWithPayRekey: Scenario = async (
@@ -639,7 +706,9 @@ const signGroupWithPayRekey: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const signTxnWithAssetClose: Scenario = async (
@@ -673,7 +742,9 @@ const signTxnWithAssetClose: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const signTxnWithRekey: Scenario = async (
@@ -706,7 +777,9 @@ const signTxnWithRekey: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const signTxnWithRekeyAndAssetClose: Scenario = async (
@@ -766,7 +839,9 @@ const signTxnWithRekeyAndAssetClose: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const signGroupOf7: Scenario = async (
@@ -854,7 +929,9 @@ const signGroupOf7: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const fullTxnGroup: Scenario = async (
@@ -893,7 +970,9 @@ const fullTxnGroup: Scenario = async (
 
   algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
 
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const multipleNonAtomicTxns: Scenario = async (
@@ -932,7 +1011,9 @@ const multipleNonAtomicTxns: Scenario = async (
 
   const group3 = [{txn: txn3}];
 
-  return [group1, group2, group3];
+  return {
+    transaction: [group1, group2, group3]
+  };
 };
 
 const multipleNonAtomicTxnsForOnlyAssets: Scenario = async (
@@ -976,7 +1057,9 @@ const multipleNonAtomicTxnsForOnlyAssets: Scenario = async (
 
   const group3 = [{txn: txn3, message: "This is a transaction message"}];
 
-  return [group1, group2, group3];
+  return {
+    transaction: [group1, group2, group3]
+  };
 };
 
 const multipleNonAtomicTxnsMixed: Scenario = async (
@@ -1019,7 +1102,9 @@ const multipleNonAtomicTxnsMixed: Scenario = async (
 
   const group3 = [{txn: txn3}];
 
-  return [group1, group2, group3];
+  return {
+    transaction: [group1, group2, group3]
+  };
 };
 
 const atomicGroupAndNonAtomicTxnsForOnlyPayment: Scenario = async (
@@ -1070,7 +1155,9 @@ const atomicGroupAndNonAtomicTxnsForOnlyPayment: Scenario = async (
 
   const group3 = [{txn: txn4}];
 
-  return [group1, group2, group3];
+  return {
+    transaction: [group1, group2, group3]
+  };
 };
 
 const atomicGroupAndNonAtomicTxnsMixed: Scenario = async (
@@ -1122,7 +1209,9 @@ const atomicGroupAndNonAtomicTxnsMixed: Scenario = async (
 
   const group3 = [{txn: txn4}];
 
-  return [group1, group2, group3];
+  return {
+    transaction: [group1, group2, group3]
+  };
 };
 
 const multipleAtomicGroupsForOnlyPayment: Scenario = async (
@@ -1169,7 +1258,9 @@ const multipleAtomicGroupsForOnlyPayment: Scenario = async (
   const group2 = [{txn: txn3}, {txn: txn4}];
   algosdk.assignGroupID(group2.map((toSign) => toSign.txn));
 
-  return [group1, group2];
+  return {
+    transaction: [group1, group2]
+  };
 };
 
 const multipleAtomicGroupsForOnlyAssets: Scenario = async (
@@ -1222,7 +1313,9 @@ const multipleAtomicGroupsForOnlyAssets: Scenario = async (
   const group2 = [{txn: txn3}, {txn: txn4, signers: []}];
   algosdk.assignGroupID(group2.map((toSign) => toSign.txn));
 
-  return [group1, group2];
+  return {
+    transaction: [group1, group2]
+  };
 };
 
 const multipleAtomicGroupsWithInvalidAsset: Scenario = async (
@@ -1270,7 +1363,9 @@ const multipleAtomicGroupsWithInvalidAsset: Scenario = async (
   const group2 = [{txn: txn3}, {txn: txn4}];
   algosdk.assignGroupID(group2.map((toSign) => toSign.txn));
 
-  return [group1, group2];
+  return {
+    transaction: [group1, group2]
+  };
 };
 
 const multipleAtomicGroupsMixed1: Scenario = async (
@@ -1321,7 +1416,9 @@ const multipleAtomicGroupsMixed1: Scenario = async (
   const group2 = [{txn: txn3}, {txn: txn4}];
   algosdk.assignGroupID(group2.map((toSign) => toSign.txn));
 
-  return [group1, group2];
+  return {
+    transaction: [group1, group2]
+  };
 };
 
 const multipleAtomicGroupsMixed2: Scenario = async (
@@ -1372,7 +1469,9 @@ const multipleAtomicGroupsMixed2: Scenario = async (
   const group2 = [{txn: txn3, signers: []}, {txn: txn4}];
   algosdk.assignGroupID(group2.map((toSign) => toSign.txn));
 
-  return [group1, group2];
+  return {
+    transaction: [group1, group2]
+  };
 };
 
 const multipleAtomicGroupSignOnly2: Scenario = async (
@@ -1419,7 +1518,9 @@ const multipleAtomicGroupSignOnly2: Scenario = async (
   const group2 = [{txn: txn3, signers: []}, {txn: txn4}];
   algosdk.assignGroupID(group2.map((toSign) => toSign.txn));
 
-  return [group1, group2];
+  return {
+    transaction: [group1, group2]
+  };
 };
 
 const atomicGroupAndNonAtomicTxnsSignOnly2: Scenario = async (
@@ -1457,7 +1558,9 @@ const atomicGroupAndNonAtomicTxnsSignOnly2: Scenario = async (
 
   const group2 = [{txn: txn3}];
 
-  return [group1, group2];
+  return {
+    transaction: [group1, group2]
+  };
 };
 
 const atomicNoSignTxn: Scenario = async (
@@ -1497,7 +1600,9 @@ const atomicNoSignTxn: Scenario = async (
   ];
   algosdk.assignGroupID(group1.map((toSign) => toSign.txn));
 
-  return [group1];
+  return {
+    transaction: [group1]
+  };
 };
 
 const atomicAndSingleNoSignTxn: Scenario = async (
@@ -1536,7 +1641,9 @@ const atomicAndSingleNoSignTxn: Scenario = async (
 
   const group3 = [{txn: txn3, signers: []}];
 
-  return [group1, group2, group3];
+  return {
+    transaction: [group1, group2, group3]
+  };
 };
 
 const txnWithLargeNote: Scenario = async (
@@ -1554,7 +1661,9 @@ const txnWithLargeNote: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const assetCreateTxnMaxInfoAndRekey: Scenario = async (
@@ -1587,7 +1696,9 @@ const assetCreateTxnMaxInfoAndRekey: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const assetCreateTxnMinInfo: Scenario = async (
@@ -1605,7 +1716,9 @@ const assetCreateTxnMinInfo: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const assetReconfigTxnResetAll: Scenario = async (
@@ -1627,7 +1740,9 @@ const assetReconfigTxnResetAll: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const assetReconfigTxnClearAll: Scenario = async (
@@ -1645,7 +1760,9 @@ const assetReconfigTxnClearAll: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const assetDeleteTxn: Scenario = async (
@@ -1662,7 +1779,9 @@ const assetDeleteTxn: Scenario = async (
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
-  return [txnsToSign];
+  return {
+    transaction: [txnsToSign]
+  };
 };
 
 const zeroFeeTxnGroup: Scenario = async (
@@ -1693,7 +1812,9 @@ const zeroFeeTxnGroup: Scenario = async (
   const group1 = [{txn: txn1, signers: []}, {txn: txn2}];
   algosdk.assignGroupID(group1.map((toSign) => toSign.txn));
 
-  return [group1];
+  return {
+    transaction: [group1]
+  };
 };
 
 const maxNumberOfTxns: Scenario = async (
@@ -1723,7 +1844,9 @@ const maxNumberOfTxns: Scenario = async (
     groups.push(group);
   }
 
-  return groups;
+  return {
+    transaction: groups
+  };
 };
 
 const tooManyTxns: Scenario = async (
@@ -1766,7 +1889,38 @@ const tooManyTxns: Scenario = async (
     }
   ]);
 
-  return groups;
+  return {
+    transaction: groups
+  };
+};
+
+const futureTransaction: Scenario = async (
+  chain: ChainType,
+  address: string
+): Promise<ScenarioReturnType> => {
+  const minutes = prompt("Please enter minutes for future transaction: ");
+  const exactDate = new Date().getTime();
+  const futureTrxDate = exactDate + Number(minutes) * 60000;
+
+  const differenceInSeconds = Math.round((futureTrxDate - exactDate) / 1000);
+  // const blockRound = Math.abs(Math.round(differenceInSeconds / 4.5));
+
+  const suggestedParams = await apiGetTxnParams(chain);
+
+  const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: address,
+    to: testAccounts[0].addr,
+    amount: 100000,
+    note: new Uint8Array(Buffer.from("example note value")),
+    suggestedParams: suggestedParams
+  });
+
+  const txnsToSign = [{txn, message: "This is a transaction message"}];
+
+  return {
+    transaction: [txnsToSign],
+    transactionTimeout: differenceInSeconds * 1000
+  };
 };
 
 export const scenarios: Array<{name: string; scenario: Scenario}> = [
@@ -1977,5 +2131,9 @@ export const scenarios: Array<{name: string; scenario: Scenario}> = [
   {
     name: "52. Sign 65 transactions",
     scenario: tooManyTxns
+  },
+  {
+    name: "53. Future transaction",
+    scenario: futureTransaction
   }
 ];

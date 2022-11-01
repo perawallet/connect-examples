@@ -4,7 +4,7 @@ import {PeraWalletConnect} from "@perawallet/connect";
 import {SignerTransaction} from "@perawallet/connect/dist/util/model/peraWalletModels";
 
 import {Scenario, scenarios} from "./util/signTxnUtils";
-import {ChainType} from "../../utils/algod/algod";
+import {ChainType, clientForChain} from "../../utils/algod/algod";
 
 interface SignTxnProps {
   accountAddress: string;
@@ -43,7 +43,10 @@ function SignTxn({
     setIsRequestPending(true);
 
     try {
-      const txnsToSign = await scenario(chain, accountAddress);
+      const {transaction: txnsToSign, transactionTimeout} = await scenario(
+        chain,
+        accountAddress
+      );
 
       const transactions: SignerTransaction[] = txnsToSign.reduce(
         (acc, val) => acc.concat(val),
@@ -53,13 +56,24 @@ function SignTxn({
       const signedTransactions = await peraWallet.signTransaction([transactions]);
 
       handleSetLog(`Transaction signed successfully: ${name}`);
-      console.log(signedTransactions);
 
-      refecthAccountDetail();
+      console.log(transactionTimeout);
+
+      if (transactionTimeout) {
+        setTimeout(async () => {
+          await clientForChain(chain).sendRawTransaction(signedTransactions).do();
+          handleSetLog(`Transaction sended network: ${name}`);
+        }, transactionTimeout);
+      } else {
+        await clientForChain(chain).sendRawTransaction(signedTransactions).do();
+
+        handleSetLog(`Transaction sended network: ${name}`);
+      }
     } catch (error) {
       handleSetLog(`${error}`);
     } finally {
       setIsRequestPending(false);
+      refecthAccountDetail();
     }
   }
 }
