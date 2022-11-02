@@ -57,8 +57,6 @@ function SignTxn({
 
       handleSetLog(`Transaction signed successfully: ${name}`);
 
-      console.log(transactionTimeout);
-
       if (transactionTimeout) {
         setTimeout(async () => {
           await clientForChain(chain).sendRawTransaction(signedTransactions).do();

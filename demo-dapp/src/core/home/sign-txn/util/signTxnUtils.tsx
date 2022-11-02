@@ -1,5 +1,5 @@
 /* eslint-disable */
-import algosdk from "algosdk";
+import algosdk, {SuggestedParams} from "algosdk";
 import {apiGetTxnParams, ChainType} from "../../../utils/algod/algod";
 
 const testAccounts = [
@@ -1898,21 +1898,32 @@ const futureTransaction: Scenario = async (
   chain: ChainType,
   address: string
 ): Promise<ScenarioReturnType> => {
+  const suggestedParams = await apiGetTxnParams(chain);
+
   const minutes = prompt("Please enter minutes for future transaction: ");
   const exactDate = new Date().getTime();
   const futureTrxDate = exactDate + Number(minutes) * 60000;
 
   const differenceInSeconds = Math.round((futureTrxDate - exactDate) / 1000);
-  // const blockRound = Math.abs(Math.round(differenceInSeconds / 4.5));
+  const blockRound = Math.abs(Math.round(differenceInSeconds / 4));
 
-  const suggestedParams = await apiGetTxnParams(chain);
+  const firstRoundFuture = suggestedParams.firstRound + blockRound;
+  const lastRoundFuture = firstRoundFuture + 1000;
+
+  const newSuggestedParams: SuggestedParams = {
+    fee: suggestedParams.fee,
+    firstRound: firstRoundFuture,
+    lastRound: lastRoundFuture,
+    genesisHash: suggestedParams.genesisHash,
+    genesisID: suggestedParams.genesisID
+  };
 
   const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
     from: address,
     to: testAccounts[0].addr,
     amount: 100000,
-    note: new Uint8Array(Buffer.from("example note value")),
-    suggestedParams: suggestedParams
+    note: new Uint8Array(Buffer.from("Example future transaction")),
+    suggestedParams: newSuggestedParams
   });
 
   const txnsToSign = [{txn, message: "This is a transaction message"}];
