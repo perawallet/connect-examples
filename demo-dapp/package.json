@@ -4,11 +4,11 @@
   "private": true,
   "dependencies": {
     "@hipo/react-ui-toolkit": "^1.0.0-beta",
-    "@perawallet/connect": "^0.2.3",
+    "@perawallet/connect": "^1.0.3",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
-    "algosdk": "^1.15.0",
+    "algosdk": "^1.23.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-scripts": "^4.0.3",

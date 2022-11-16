@@ -8,7 +8,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@perawallet/connect": "1.0.1",
+    "@perawallet/connect": "1.0.3",
     "algosdk": "1.23.2",
     "parcel-bundler": "^1.6.1"
   },
