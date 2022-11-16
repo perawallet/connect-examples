@@ -1,5 +1,5 @@
 {
-  "name": "pera-connect-svelte-demo",
+  "name": "perawallet-connect-svelte-demo",
   "version": "1.0.0",
   "devDependencies": {
     "npm-run-all": "^4.1.5",
@@ -11,8 +11,8 @@
     "sirv-cli": "^0.3.1"
   },
   "dependencies": {
-    "@perawallet/connect": "0.2.0",
-    "algosdk": "1.18.1",
+    "@perawallet/connect": "1.0.1",
+    "algosdk": "1.23.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "svelte": "^3.32.3"
@@ -25,5 +25,5 @@
     "start:dev": "sirv public --dev"
   },
   "keywords": [],
-  "description": "@perawallet/connect Svelte Demo"
+  "description": ""
 }

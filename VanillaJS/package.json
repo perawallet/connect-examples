@@ -1,5 +1,5 @@
 {
-  "name": "perawallet-connect-vanilla-js-demo",
+  "name": "perawallet-connect-vanillajs-demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
@@ -8,12 +8,9 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@perawallet/connect": "0.2.0",
-    "algosdk": "1.19.0",
-    "parcel-bundler": "^1.6.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-scripts": "5.0.1"
+    "@perawallet/connect": "1.0.1",
+    "algosdk": "1.23.2",
+    "parcel-bundler": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",

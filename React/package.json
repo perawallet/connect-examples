@@ -1,12 +1,12 @@
 {
-  "name": "connect-react-demo",
+  "name": "perawallet-connect-react-demo",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
-    "@perawallet/connect": "0.2.0",
-    "algosdk": "1.18.1",
+    "@perawallet/connect": "1.0.1",
+    "algosdk": "1.23.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "4.0.3"
