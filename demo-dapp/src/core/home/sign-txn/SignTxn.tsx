@@ -3,7 +3,7 @@ import {Button, List, ListItem} from "@hipo/react-ui-toolkit";
 import {PeraWalletConnect} from "@perawallet/connect";
 import {SignerTransaction} from "@perawallet/connect/dist/util/model/peraWalletModels";
 
-import {Scenario, scenarios} from "./util/signTxnUtils";
+import {mainnetScenarios, Scenario, scenarios} from "./util/signTxnUtils";
 import {ChainType, clientForChain} from "../../utils/algod/algod";
 
 interface SignTxnProps {
@@ -24,19 +24,45 @@ function SignTxn({
   const [isRequestPending, setIsRequestPending] = useState(false);
 
   return (
-    <List items={scenarios} customClassName={"app__actions"}>
-      {(item) => (
-        <ListItem>
-          <Button
-            customClassName={"app__button"}
-            onClick={() => signTransaction(item.scenario, item.name)}
-            shouldDisplaySpinner={isRequestPending}
-            isDisabled={isRequestPending}>
-            {isRequestPending ? "Loading..." : item.name}
-          </Button>
-        </ListItem>
-      )}
-    </List>
+    <>
+      <div style={{marginTop: "45px"}}>
+        <h3>Mainnet only, do not sign!</h3>
+        {chain === ChainType.TestNet && <small>Switch to MainNet to see txns</small>}
+        
+        <List items={mainnetScenarios} customClassName={"app__actions"}>
+          {(item) => (
+            <ListItem>
+              <Button
+                customClassName={"app__button"}
+                onClick={() => signTransaction(item.scenario, item.name)}
+                shouldDisplaySpinner={isRequestPending}
+                isDisabled={isRequestPending}>
+                {isRequestPending ? "Loading..." : item.name}
+              </Button>
+            </ListItem>
+          )}
+        </List>
+      </div>
+
+
+      <div style={{marginTop: "45px"}}>
+        <h3>Both Networks</h3>
+
+        <List items={scenarios} customClassName={"app__actions"}>
+          {(item) => (
+            <ListItem>
+              <Button
+                customClassName={"app__button"}
+                onClick={() => signTransaction(item.scenario, item.name)}
+                shouldDisplaySpinner={isRequestPending}
+                isDisabled={isRequestPending}>
+                {isRequestPending ? "Loading..." : item.name}
+              </Button>
+            </ListItem>
+          )}
+        </List>
+      </div>
+    </>
   );
 
   async function signTransaction(scenario: Scenario, name: string) {
