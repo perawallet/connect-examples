@@ -49,6 +49,10 @@ export default function IndexPage() {
   }
 
   function handleDisconnectWalletClick() {
+    if (!isConnectedToPeraWallet) {
+        return;
+    }
+    
     peraWallet.disconnect();
 
     setAccountAddress(null);
