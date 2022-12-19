@@ -11,7 +11,7 @@
     "sirv-cli": "^0.3.1"
   },
   "dependencies": {
-    "@perawallet/connect": "1.0.3",
+    "@perawallet/connect": "^1.0.7",
     "algosdk": "1.23.2",
     "svelte": "^3.32.3"
   },

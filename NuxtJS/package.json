@@ -12,7 +12,7 @@
     "post-update": "yarn upgrade --latest"
   },
   "dependencies": {
-    "@perawallet/connect": "1.0.3",
+    "@perawallet/connect": "^1.0.7",
     "algosdk": "1.23.2",
     "nuxt": "2.15.8"
   },

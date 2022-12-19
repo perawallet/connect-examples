@@ -943,7 +943,7 @@ const fullTxnGroup: Scenario = async (
   const txnsToSign: Array<{txn: algosdk.Transaction; signers?: [string]}> = [];
 
   for (let i = 0; i < 8; i++) {
-    const assetIndex = 100 + i;
+    const assetIndex = getAssetIndex(chain, AssetTransactionType.Transfer);
 
     const optIn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
       from: address,
@@ -1934,6 +1934,63 @@ const futureTransaction: Scenario = async (
   };
 };
 
+const invalidGroupingIssue: Scenario = async (
+  chain: ChainType,
+  address: string
+): Promise<ScenarioReturnType> => {
+  const suggestedParams = await apiGetTxnParams(chain);
+
+  const txn1 = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: address,
+    to: testAccounts[0].addr,
+    amount: 1000000,
+    note: new Uint8Array(Buffer.from("example note value")),
+    suggestedParams
+  });
+
+  const txn2 = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: address,
+    to: testAccounts[0].addr,
+    amount: 1000000,
+    note: new Uint8Array(Buffer.from("example note value")),
+    suggestedParams
+  });
+
+  const txn3 = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: address,
+    to: testAccounts[0].addr,
+    amount: 1000000,
+    note: new Uint8Array(Buffer.from("example note value")),
+    suggestedParams
+  });
+
+  const txn4 = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: address,
+    to: testAccounts[0].addr,
+    amount: 1000000,
+    note: new Uint8Array(Buffer.from("example note value")),
+    suggestedParams
+  });
+
+  const txn5 = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+    from: testAccounts[0].addr,
+    to: address,
+    amount: 1000000,
+    note: new Uint8Array(Buffer.from("example note value")),
+    suggestedParams
+  });
+
+  const txnsToSign = [{txn: txn1}, {txn: txn2}, {txn: txn3}, {txn: txn4}, {txn: txn5}];
+
+  algosdk.assignGroupID(txnsToSign.map((toSign) => toSign.txn));
+
+  txnsToSign.pop();
+
+  return {
+    transaction: [txnsToSign]
+  };
+};
+
 const swapAlgoToUSDC: Scenario = async (
   chain: ChainType,
   address: string
@@ -1941,30 +1998,34 @@ const swapAlgoToUSDC: Scenario = async (
   const suggestedParams = await apiGetTxnParams(chain);
 
   const groups: Array<Array<{txn: algosdk.Transaction}>> = [
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: address,
-        amount: 0,
-        assetIndex: 31566704,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "NGIHJMECRSFHIEQDHBVTLR54K7DOZWM5M6UM3A5CIOYSP6H3QTGSHHGJCQ",
-        amount: 5000000,
-        suggestedParams
-      })
-    }],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: address,
+          amount: 0,
+          assetIndex: 31566704,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "NGIHJMECRSFHIEQDHBVTLR54K7DOZWM5M6UM3A5CIOYSP6H3QTGSHHGJCQ",
+          amount: 5000000,
+          suggestedParams
+        })
+      }
+    ],
     [
       {
         txn: algosdk.makeApplicationNoOpTxnFromObject({
           from: address,
           appIndex: 605929989,
           appArgs: [Uint8Array.from([0]), Uint8Array.from([0, 1])],
-          suggestedParams,
+          suggestedParams
         })
       }
     ]
@@ -1973,8 +2034,8 @@ const swapAlgoToUSDC: Scenario = async (
   groups[2][0].txn.fee = 2000;
 
   // Assign Group ID
-  groups.forEach(txns => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)))
-  
+  groups.forEach((txns) => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)));
+
   return {
     transaction: groups
   };
@@ -1987,30 +2048,34 @@ const swapAlgoToGoETH: Scenario = async (
   const suggestedParams = await apiGetTxnParams(chain);
 
   const groups: Array<Array<{txn: algosdk.Transaction}>> = [
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: address,
-        amount: 0,
-        assetIndex: 386195940,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "6NXX7RGJFLEI3HEQEZXDP73SMQKAPWS4N7CEQJ4IEVONUWYWJLT4NM5QQM",
-        amount: 3000000,
-        suggestedParams
-      })
-    }],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: address,
+          amount: 0,
+          assetIndex: 386195940,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "6NXX7RGJFLEI3HEQEZXDP73SMQKAPWS4N7CEQJ4IEVONUWYWJLT4NM5QQM",
+          amount: 3000000,
+          suggestedParams
+        })
+      }
+    ],
     [
       {
         txn: algosdk.makeApplicationNoOpTxnFromObject({
           from: address,
           appIndex: 607660059,
           appArgs: [Uint8Array.from([0]), Uint8Array.from([0, 1])],
-          suggestedParams,
+          suggestedParams
         })
       }
     ]
@@ -2019,13 +2084,12 @@ const swapAlgoToGoETH: Scenario = async (
   groups[2][0].txn.fee = 2000;
 
   // Assign Group ID
-  groups.forEach(txns => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)))
-  
+  groups.forEach((txns) => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)));
+
   return {
     transaction: groups
   };
 };
-
 
 const depositAlgoFF: Scenario = async (
   chain: ChainType,
@@ -2034,21 +2098,23 @@ const depositAlgoFF: Scenario = async (
   const suggestedParams = await apiGetTxnParams(chain);
 
   const groups: Array<Array<{txn: algosdk.Transaction}>> = [
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "AV6PFVXWDQ7RVNQYOEXCWXCLXVJ5V57WVMVQZ2TWH4EKTB7GSWKUIAUPXQ",
-        amount: 2000000,
-        suggestedParams
-      })
-    }],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "AV6PFVXWDQ7RVNQYOEXCWXCLXVJ5V57WVMVQZ2TWH4EKTB7GSWKUIAUPXQ",
+          amount: 2000000,
+          suggestedParams
+        })
+      }
+    ],
     [
       {
         txn: algosdk.makeApplicationNoOpTxnFromObject({
           from: address,
           appIndex: 686498781,
           appArgs: [Uint8Array.from([0]), Uint8Array.from([0, 1])],
-          suggestedParams,
+          suggestedParams
         })
       }
     ]
@@ -2057,8 +2123,8 @@ const depositAlgoFF: Scenario = async (
   groups[1][0].txn.fee = 3000;
 
   // Assign Group ID
-  groups.forEach(txns => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)))
-  
+  groups.forEach((txns) => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)));
+
   return {
     transaction: groups
   };
@@ -2071,39 +2137,45 @@ const poolAlgoUsdcFF: Scenario = async (
   const suggestedParams = await apiGetTxnParams(chain);
 
   const groups: Array<Array<{txn: algosdk.Transaction}>> = [
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: address,
-        amount: 0,
-        assetIndex: 919950894,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "KIW56KLIBX5UMWS5RT346TNA4HRV5H445S2LMQLRCR73SOHRVSM5TZBQ4A",
-        amount: 1160825,
-        assetIndex: 31566704,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "KIW56KLIBX5UMWS5RT346TNA4HRV5H445S2LMQLRCR73SOHRVSM5TZBQ4A",
-        amount: 3977452,
-        suggestedParams
-      })
-    }],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: address,
+          amount: 0,
+          assetIndex: 919950894,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "KIW56KLIBX5UMWS5RT346TNA4HRV5H445S2LMQLRCR73SOHRVSM5TZBQ4A",
+          amount: 1160825,
+          assetIndex: 31566704,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "KIW56KLIBX5UMWS5RT346TNA4HRV5H445S2LMQLRCR73SOHRVSM5TZBQ4A",
+          amount: 3977452,
+          suggestedParams
+        })
+      }
+    ],
     [
       {
         txn: algosdk.makeApplicationNoOpTxnFromObject({
           from: address,
           appIndex: 919954173,
           appArgs: [new Uint8Array(Buffer.from("pool_step_1"))],
-          suggestedParams,
+          suggestedParams
         })
       }
     ],
@@ -2113,7 +2185,7 @@ const poolAlgoUsdcFF: Scenario = async (
           from: address,
           appIndex: 919954173,
           appArgs: [new Uint8Array(Buffer.from("pool_step_2"))],
-          suggestedParams,
+          suggestedParams
         })
       }
     ],
@@ -2123,7 +2195,7 @@ const poolAlgoUsdcFF: Scenario = async (
           from: address,
           appIndex: 919954173,
           appArgs: [new Uint8Array(Buffer.from("pool_step_3"))],
-          suggestedParams,
+          suggestedParams
         })
       }
     ],
@@ -2133,7 +2205,7 @@ const poolAlgoUsdcFF: Scenario = async (
           from: address,
           appIndex: 919954173,
           appArgs: [new Uint8Array(Buffer.from("pool_step_4"))],
-          suggestedParams,
+          suggestedParams
         })
       }
     ],
@@ -2143,7 +2215,7 @@ const poolAlgoUsdcFF: Scenario = async (
           from: address,
           appIndex: 919954173,
           appArgs: [new Uint8Array(Buffer.from("pool_step_5"))],
-          suggestedParams,
+          suggestedParams
         })
       }
     ],
@@ -2153,7 +2225,7 @@ const poolAlgoUsdcFF: Scenario = async (
           from: address,
           appIndex: 919954173,
           appArgs: [new Uint8Array(Buffer.from("pool_step_6"))],
-          suggestedParams,
+          suggestedParams
         })
       }
     ],
@@ -2163,7 +2235,7 @@ const poolAlgoUsdcFF: Scenario = async (
           from: address,
           appIndex: 919954173,
           appArgs: [new Uint8Array(Buffer.from("pool_step_7"))],
-          suggestedParams,
+          suggestedParams
         })
       }
     ]
@@ -2172,13 +2244,12 @@ const poolAlgoUsdcFF: Scenario = async (
   groups[3][0].txn.fee = 29000;
 
   // Assign Group ID
-  groups.forEach(txns => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)))
-  
+  groups.forEach((txns) => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)));
+
   return {
     transaction: groups
   };
 };
-
 
 const authAlgoGems: Scenario = async (
   chain: ChainType,
@@ -2187,17 +2258,19 @@ const authAlgoGems: Scenario = async (
   const suggestedParams = await apiGetTxnParams(chain);
 
   const groups: Array<Array<{txn: algosdk.Transaction}>> = [
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: address,
-        amount: 0,
-        note: new Uint8Array(Buffer.from("challenge/1449301/gems")),
-        suggestedParams
-      })
-    }],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: address,
+          amount: 0,
+          note: new Uint8Array(Buffer.from("challenge/1449301/gems")),
+          suggestedParams
+        })
+      }
+    ]
   ];
-  
+
   return {
     transaction: groups
   };
@@ -2210,45 +2283,53 @@ const buyNFTAlgogems: Scenario = async (
   const suggestedParams = await apiGetTxnParams(chain);
 
   const groups: Array<Array<{txn: algosdk.Transaction}>> = [
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: address,
-        amount: 0,
-        assetIndex: 886237574,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: "N4EJ2ZFGWCEL4PVTCJSLD7RC4WVIUNO57V7LW2FQY7DFOP4EEN4XYC5UEM",
-        to: address,
-        amount: 1,
-        assetIndex: 886237574,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "RJASLRMECMQL66PH2KLMFSCYMOOBOK7KRX3XMAWDKDB2PQ5J3U5FMPAJNE",
-        amount: 3600000,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "VWZBFLBUN6O5A5W6IWHMDUVP5NH2LPV4ZYFMAHP4FQBBYP627MP6WPOEG4",
-        amount: 400000,
-        suggestedParams
-      })
-    }],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: address,
+          amount: 0,
+          assetIndex: 886237574,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: "N4EJ2ZFGWCEL4PVTCJSLD7RC4WVIUNO57V7LW2FQY7DFOP4EEN4XYC5UEM",
+          to: address,
+          amount: 1,
+          assetIndex: 886237574,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "RJASLRMECMQL66PH2KLMFSCYMOOBOK7KRX3XMAWDKDB2PQ5J3U5FMPAJNE",
+          amount: 3600000,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "VWZBFLBUN6O5A5W6IWHMDUVP5NH2LPV4ZYFMAHP4FQBBYP627MP6WPOEG4",
+          amount: 400000,
+          suggestedParams
+        })
+      }
+    ]
   ];
 
   // Assign Group ID
-  groups.forEach(txns => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)))
-  
+  groups.forEach((txns) => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)));
+
   return {
     transaction: groups
   };
@@ -2261,61 +2342,73 @@ const buyNFTAlgoxNFT: Scenario = async (
   const suggestedParams = await apiGetTxnParams(chain);
 
   const groups: Array<Array<{txn: algosdk.Transaction}>> = [
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: address,
-        amount: 0,
-        assetIndex: 865021507,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: "CATN6JYGMBZF4OAQBXZTGALLB3X3XUUU6CQAKXUPNKVOC32VNTRWK25HD4",
-        to: address,
-        amount: 1,
-        assetIndex: 865021507,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "BSKX6GSPTSY2KKXBO5L367OBY5SJT6GD25FV3RY25VLOGCMORQ6COPCOXY",
-        amount: 196900,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "ANGEL3CMT7TEXSBJR3DCTJTZCQFOF6FJB6PDKU4IOAMTNPXGR7XUYKOU5Y",
-        amount: 18803950,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "XNFT36FUCFRR6CK675FW4BEBCCCOJ4HOSMGCN6J2W6ZMB34KM2ENTNQCP4",
-        amount: 689150,
-        suggestedParams
-      })
-    }],
-    [{
-      txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: address,
-        to: "CATN6JYGMBZF4OAQBXZTGALLB3X3XUUU6CQAKXUPNKVOC32VNTRWK25HD4",
-        amount: 1000,
-        suggestedParams
-      })
-    }],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: address,
+          amount: 0,
+          assetIndex: 865021507,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          from: "CATN6JYGMBZF4OAQBXZTGALLB3X3XUUU6CQAKXUPNKVOC32VNTRWK25HD4",
+          to: address,
+          amount: 1,
+          assetIndex: 865021507,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "BSKX6GSPTSY2KKXBO5L367OBY5SJT6GD25FV3RY25VLOGCMORQ6COPCOXY",
+          amount: 196900,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "ANGEL3CMT7TEXSBJR3DCTJTZCQFOF6FJB6PDKU4IOAMTNPXGR7XUYKOU5Y",
+          amount: 18803950,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "XNFT36FUCFRR6CK675FW4BEBCCCOJ4HOSMGCN6J2W6ZMB34KM2ENTNQCP4",
+          amount: 689150,
+          suggestedParams
+        })
+      }
+    ],
+    [
+      {
+        txn: algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+          from: address,
+          to: "CATN6JYGMBZF4OAQBXZTGALLB3X3XUUU6CQAKXUPNKVOC32VNTRWK25HD4",
+          amount: 1000,
+          suggestedParams
+        })
+      }
+    ]
   ];
 
   // Assign Group ID
-  groups.forEach(txns => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)))
-  
+  groups.forEach((txns) => algosdk.assignGroupID(txns.map((toSign) => toSign.txn)));
+
   return {
     transaction: groups
   };
@@ -2351,7 +2444,6 @@ export const mainnetScenarios: Array<{name: string; scenario: Scenario}> = [
     scenario: buyNFTAlgoxNFT
   }
 ];
-
 
 export const scenarios: Array<{name: string; scenario: Scenario}> = [
   {
@@ -2565,5 +2657,9 @@ export const scenarios: Array<{name: string; scenario: Scenario}> = [
   {
     name: "53. Future transaction",
     scenario: futureTransaction
+  },
+  {
+    name: "54. Invalid Grouping issue",
+    scenario: invalidGroupingIssue
   }
 ];
