@@ -1991,6 +1991,30 @@ const invalidGroupingIssue: Scenario = async (
   };
 };
 
+const appCallWithBoxes: Scenario = async (
+  chain: ChainType,
+  address: string
+): Promise<ScenarioReturnType> => {
+  const suggestedParams = await apiGetTxnParams(chain);
+
+  const appIndex = getAppIndex(chain);
+
+  const txn = algosdk.makeApplicationNoOpTxnFromObject({
+    from: address,
+    appIndex,
+    note: new Uint8Array(Buffer.from("example note value")),
+    appArgs: [],
+    suggestedParams,
+    boxes: [{appIndex: appIndex, name: Uint8Array.from([0])}]
+  });
+
+  const txnsToSign = [{txn}];
+
+  return {
+    transaction: [txnsToSign]
+  };
+};
+
 const swapAlgoToUSDC: Scenario = async (
   chain: ChainType,
   address: string
@@ -2414,6 +2438,28 @@ const buyNFTAlgoxNFT: Scenario = async (
   };
 };
 
+const singleZoneTransferTxn: Scenario = async (
+  chain: ChainType,
+  address: string
+): Promise<ScenarioReturnType> => {
+  const suggestedParams = await apiGetTxnParams(chain);
+
+  const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+    from: address,
+    to: testAccounts[0].addr,
+    amount: 1000000,
+    assetIndex: 444035862,
+    note: new Uint8Array(Buffer.from("example note value")),
+    suggestedParams
+  });
+
+  const txnsToSign = [{txn}];
+
+  return {
+    transaction: [txnsToSign]
+  };
+};
+
 export const mainnetScenarios: Array<{name: string; scenario: Scenario}> = [
   {
     name: "1. Swap Algo to USDC (algofi)",
@@ -2442,6 +2488,10 @@ export const mainnetScenarios: Array<{name: string; scenario: Scenario}> = [
   {
     name: "7. Buy NFT (algoxnft)",
     scenario: buyNFTAlgoxNFT
+  },
+  {
+    name: "8. Zone Transfer",
+    scenario: singleZoneTransferTxn
   }
 ];
 
@@ -2661,5 +2711,9 @@ export const scenarios: Array<{name: string; scenario: Scenario}> = [
   {
     name: "54. Invalid Grouping issue",
     scenario: invalidGroupingIssue
+  },
+  {
+    name: "55. Application txn with boxes",
+    scenario: appCallWithBoxes
   }
 ];
