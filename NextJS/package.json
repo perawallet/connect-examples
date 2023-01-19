@@ -8,7 +8,7 @@
     "post-update": "yarn upgrade --latest"
   },
   "dependencies": {
-    "@perawallet/connect": "^1.0.7",
+    "@perawallet/connect": "^1.1.0",
     "algosdk": "1.23.2",
     "next": "latest",
     "react": "17.0.2",

@@ -10,9 +10,7 @@ import PeraToast from "../component/toast/PeraToast";
 import {ChainType} from "../utils/algod/algod";
 import useGetAccountDetailRequest from "../hooks/useGetAccountDetailRequest/useGetAccountDetailRequest";
 
-const peraWallet = new PeraWalletConnect({
-  network: "testnet"
-});
+const peraWallet = new PeraWalletConnect();
 
 function Home() {
   const [chainType, setChainType] = useState<ChainType>(ChainType.TestNet);
